@@ -1,1 +1,94 @@
+#include <iostream>
 
+using namespace std;
+
+// Определение структуры узла односвязного списка
+struct Node {
+    int data;       // Данные узла
+    Node* next;     // Указатель на следующий узел
+
+    Node(int value) : data(value), next(nullptr) {} // Конструктор
+};
+
+// Функция для объединения двух односвязных списков
+Node* mergeLists(Node* list1, Node* list2) {
+    // Если один из списков пуст, возвращаем другой
+    if (!list1) return list2;
+    if (!list2) return list1;
+
+    // Указатель на голову нового списка
+    Node* mergedHead = nullptr;
+
+    // Указатель для построения нового списка
+    if (list1->data < list2->data) {
+        mergedHead = list1;
+        list1 = list1->next;
+    }
+    else {
+        mergedHead = list2;
+        list2 = list2->next;
+    }
+
+    Node* current = mergedHead;
+
+    // Объединяем списки
+    while (list1 && list2) {
+        if (list1->data < list2->data) {
+            current->next = list1;
+            list1 = list1->next;
+        }
+        else {
+            current->next = list2;
+            list2 = list2->next;
+        }
+        current = current->next;
+    }
+
+    // Присоединяем оставшиеся элементы
+    if (list1) {
+        current->next = list1;
+    }
+    else {
+        current->next = list2;
+    }
+
+    return mergedHead;
+}
+
+// Функция для вывода списка
+void printList(Node* head) {
+    while (head) {
+        cout << head->data << " ";
+        head = head->next;
+    }
+    cout << endl;
+}
+
+// Пример использования
+int main() {
+    // Создание первого списка: 1 -> 3 -> 5
+    Node* list1 = new Node(1);
+    list1->next = new Node(3);
+    list1->next->next = new Node(5);
+
+    // Создание второго списка: 2 -> 4 -> 6
+    Node* list2 = new Node(2);
+    list2->next = new Node(4);
+    list2->next->next = new Node(6);
+
+    cout << "Первый список: ";
+    printList(list1);
+    cout << "Второй список: ";
+    printList(list2);
+
+    // Объединение списков
+    Node* mergedList = mergeLists(list1, list2);
+
+    cout << "Объединенный список: ";
+    printList(mergedList);
+
+    // Освобождение памяти
+    // (в реальном коде нужно освободить память для всех узлов)
+
+    return 0;
+}
